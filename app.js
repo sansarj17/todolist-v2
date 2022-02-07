@@ -3,6 +3,8 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const _ = require("lodash");
 
+const idPass = require("./idPass.js");
+
 const app = express();
 
 app.set("view engine", "ejs");
@@ -10,12 +12,16 @@ app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-mongoose.connect(
-    "mongodb+srv://admin-sansarj17:testing17@cluster0.3lgl3.mongodb.net/todolistDB",
-    {
-        useNewUrlParser: true,
-    }
-);
+const credentials = idPass.getIdPass();
+
+const mongoUrl =
+    "mongodb+srv://admin-" +
+    credentials +
+    "@cluster0.3lgl3.mongodb.net/todolistDB";
+
+mongoose.connect(mongoUrl, {
+    useNewUrlParser: true,
+});
 
 const itemsSchema = new mongoose.Schema({
     name: String,
